@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arc Edge 3D Measurement Tool</title>
+  <style>
+    body {
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+     // background-color: indigo;
+      margin: 0;
+      padding: 0;
+    }
+
+    .speaker-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .speaker-button img {
+      background-color: transparent;
+      width: 100px;
+      height: 100px;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    #controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+    #sliders {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 400px;
+      margin-block: 10px;
+    }
+
+    #inputs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    input[type="number"],
+    button {
+      font-size: 16px;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: deepskyblue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 25px;
+    }
+
+    h1 img {
+      width: 300px;
+      height: 300px;
+      margin-right: 10px;
+    }
+
+    .radicaledge {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-width: 500px;
+    }
+
+    .h1docu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      margin-top: 20px;
+      min-width: 500px;
+    }
+
+    h1 {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      color: #fff;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 24px;
+    }
+
+    h6 {
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    h4 {
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .docu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      margin-top: 20px;
+      min-width: 500px;
+    }
+
+    h3 {
+      color: white;
+      font-weight: bold;
+      font-size: 10;
+    }
+
+    p {
+      color: white;
+      font-weight: bold;
+    }
+.flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 80%;
+      /* Adjust as necessary */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="radicaledge">
+    <div class="h1docu">
+      <h1><img src="https://static.wixstatic.com/media/2451db_b261535123bc4050a030074e93cbc511~mv2.png" alt="Logo">| Radical Measure</h1>
+      <div class="docu">
+        <h6>[ In Development. ]</h6>
+
+        <h3 style="color: white; font-weight: bold;">
+          <a href="https://github.com/DART-Edge-AI/Autumn/blob/main/Arc%20Edge%20%26%20Circumference.pdf" target="_blank" rel="noopener noreferrer">Arc Edge & Circumference Algorithms</a>
+        </h3>
+
+        <h3 style="color: white; font-weight: bold;">
+          <a href="https://github.com/DART-Edge-AI/Autumn/blob/main/Algebra%20Fields%20and%20Math%20Terminology.pdf" target="_blank" rel="noopener noreferrer">Algebra Fields and Math Terminology</a>
+        </h3>
+      </div>
+      <div class="DARTSound">
+        <!-- Button to control audio -->
+        <button id="mute" onClick="playPause()" class="speaker-button">
+          <img id="speaker-icon" src="https://static.wixstatic.com/media/2451db_f3535dbdc10b4117a28832eeef15fa71~mv2.png" alt="Play">
+          <audio id="backgroundMusic" src="https://static.wixstatic.com/mp3/2451db_3d232605a51744daaf4e8f0e6f8fb0a0.mp3" autoplay loop></audio>
+        </button>
+
+        <script>
+          const audioElement = document.getElementById('backgroundMusic');
+          const speakerIcon = document.getElementById('speaker-icon');
+
+          function playPause() {
+            if (audioElement.paused) {
+              audioElement.play();
+              speakerIcon.src = "https://static.wixstatic.com/media/2451db_18a14b6ce43e4412bbe3edb353b6f399~mv2.png"; // Switch to pause icon
+              speakerIcon.alt = "Pause";
+            } else {
+              audioElement.pause();
+              speakerIcon.src = "https://static.wixstatic.com/media/2451db_f3535dbdc10b4117a28832eeef15fa71~mv2.png"; // Switch to play icon
+              speakerIcon.alt = "Play";
+            }
+          }
+        </script>
+      </div>
+    </div>
+    <div id="controls">
+      <button id="exportPNGButton">Export as PNG</button>
+      <button id="exportGLBButton">Export as GLB</button>
+    </div>
+    <div id="sliders">
+      <label>
+        Key Light
+        <input type="range" id="keyLightSlider" min="0" max="2" step="0.01" value="1">
+      </label>
+
+      <label>
+        Fill Light
+        <input type="range" id="fillLightSlider" min="0" max="2" step="0.01" value="0.75">
+      </label>
+
+      <label>
+        Back Light
+        <input type="range" id="backLightSlider" min="0" max="2" step="0.01" value="1.5">
+      </label>
+    </div>
+    <br>
+    <br>
+    <div id="inputs">
+      <input type="number" id="inputX" placeholder="Enter X value">
+      <input type="number" id="inputY" placeholder="Enter Y value">
+      <input type="number" id="inputZ" placeholder="Enter Z value">
+      <input type="number" id="inputCurves" placeholder="Enter number of curves">
+      <br>
+      <button id="generateArcButton">Generate Arc</button>
+    </div>
+
+    <canvas id="arcCanvas" width="875" height="875"></canvas>
+    
+<div class="flow">
+  <a href="https://docs.google.com/document/d/1rWhQXeMH_LndhWJd6G9jk56olvIjlqOqhIOrrX0Q6y0/edit?usp=drivesdk" target="_blank">
+    <img src="https://static.wixstatic.com/media/2451db_2dc112c5dba546369b126f757222c5ed~mv2.png" alt="Autumn" style="max-width: 100%; height:auto;">
+  </a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('arcCanvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(875, 875);
+            renderer.setClearColor(0x000000, 0); // Set canvas to be transparent
+
+            const scene = new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera(75, 875 / 875, 0.01, 10000);
+            camera.position.z = 20;
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+            // Lighting
+            const keyLight = new THREE.PointLight(0xffffff, 1);
+            keyLight.position.set(10, 10, 10);
+            scene.add(keyLight);
+
+            const fillLight = new THREE.PointLight(0xffffff, 0.75);
+            fillLight.position.set(-10, 10, 10);
+            scene.add(fillLight);
+
+            const backLight = new THREE.PointLight(0xffffff, 1.5);
+            backLight.position.set(0, -10, -10);
+            scene.add(backLight);
+
+            // Spheres
+            const mainSphereGeometry = new THREE.SphereGeometry(5, 32, 32);
+            const mainSphereMaterial = new THREE.MeshPhongMaterial({ color: 0x87CEEB, opacity: 0.25, transparent: true });
+            const mainSphere = new THREE.Mesh(mainSphereGeometry, mainSphereMaterial);
+            mainSphere.position.set(0, 0, 0);
+            scene.add(mainSphere);
+
+            const halfSphereGeometry = new THREE.SphereGeometry(2.5, 32, 32);
+            const halfSphereMaterial = new THREE.MeshPhongMaterial({ color: 0xFF6347 });
+            const halfSphere = new THREE.Mesh(halfSphereGeometry, halfSphereMaterial);
+            halfSphere.position.set(0, 0, 0);
+            scene.add(halfSphere);
+
+            const smallSphereGeometry = new THREE.SphereGeometry(0.625, 32, 32);
+            const smallSphereMaterial = new THREE.MeshPhongMaterial({ color: 0x00BFFF });
+
+            const eighthSpherenegXposY = new THREE.Mesh(smallSphereGeometry, smallSphereMaterial);
+            eighthSpherenegXposY.position.set(-1.8, 1.8, -1.8);
+            scene.add(eighthSpherenegXposY);
+
+            const eighthSphereposXposY = new THREE.Mesh(smallSphereGeometry, smallSphereMaterial);
+            eighthSphereposXposY.position.set(1.8, 1.8, 1.8);
+            scene.add(eighthSphereposXposY);
+
+            const eighthSpherenegXnegY = new THREE.Mesh(smallSphereGeometry, smallSphereMaterial);
+            eighthSpherenegXnegY.position.set(-1.8, -1.8, -1.8);
+            scene.add(eighthSpherenegXnegY);
+
+            const eighthSphereposXnegY = new THREE.Mesh(smallSphereGeometry, smallSphereMaterial);
+            eighthSphereposXnegY.position.set(1.8, -1.8, 1.8);
+            scene.add(eighthSphereposXnegY);
+
+            // Sliders for light controls
+            document.getElementById('keyLightSlider').addEventListener('input', (event) => {
+              keyLight.intensity = event.target.value;
+            });
+
+            document.getElementById('fillLightSlider').addEventListener('input', (event) => {
+              fillLight.intensity = event.target.value;
+            });
+
+            document.getElementById('backLightSlider').addEventListener('input', (event) => {
+              backLight.intensity = event.target.value;
+            });
+
+            // Function to clear previous arcs
+            function clearPreviousArcs() {
+              while (scene.children.length > 9) { // Assuming the first 9 children are the lights and spheres
+                scene.remove(scene.children[9]);
+              }
+            }
+
+            // Function to create a new arc
+            function createArc(x, y, z, curves, deviation) {
+              clearPreviousArcs();
+
+              const curvePoints = [];
+              for (let i = 0; i < curves; i++) {
+                const theta = (i / (curves - 1)) * Math.PI * 2;
+                curvePoints.push(new THREE.Vector3(x + Math.cos(theta) * deviation, y, z + Math.sin(theta) * deviation));
+              }
+
+              const curve = new THREE.CatmullRomCurve3(curvePoints);
+              const geometry = new THREE.TubeGeometry(curve, 64, 0.1, 8, false);
+              const material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+              const tube = new THREE.Mesh(geometry, material);
+
+              scene.add(tube);
+            }
+
+            // Function to fetch data and update the scene
+            function fetchDataAndUpdateScene(x, y, z, curves, deviation) {
+              fetch(`https://script.google.com/macros/s/AKfycbxQzUTU4nUpu1ceJtuYZo4fdrMnccmtHfHllS1jrqJSW2WKp6tZvyG590PZ6ph2VeGlyQ/exec?x=${x}&y=${y}&z=${z}&curves=${curves}`)
+                .then(response => response.json())
+                .then(data => {
+                  createArc(x, y, z, curves, deviation);
+                });
+            }
+
+            function animate() {
+              requestAnimationFrame(animate);
+              controls.update();
+              renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Event listener for the generate arc button
+            document.getElementById('generateArcButton').addEventListener('click', () => {
+              const x = parseFloat(document.getElementById('inputX').value) || 0;
+              const y = parseFloat(document.getElementById('inputY').value) || 0;
+              const z = parseFloat(document.getElementById('inputZ').value) || 0;
+              const curves = parseInt(document.getElementById('inputCurves').value, 10) || 10;
+
+              // Calculate deviation and additional curves if input 4 is provided
+              const deviation = y - x;
+              const additionalCurves = (document.getElementById('inputCurves').value) ? parseFloat(document.getElementById('inputCurves').value) : 0;
+
+              // Apply the formula for circumference
+              const circumference = Math.sqrt((deviation * 3) ** 2);
+              const area = Math.sqrt(circumference ** 2);
+              const volume = Math.sqrt(area ** 3);
+              const sphereSurfaceArea = volume * 0.25;
+
+              fetchDataAndUpdateScene(x, y, z, curves + additionalCurves, deviation);
+            });
+
+            // Export functions
+            function exportToPNG() {
+              renderer.render(scene, camera);
+              const dataURL = renderer.domElement.toDataURL('image/png');
+              const link = document.createElement('a');
+              link.href = dataURL;
+              link.download = 'Arc Edge.png';
+              link.click();
+            }
+
+            function exportToGLB() {
+              const exporter = new THREE.GLTFExporter();
+              exporter.parse(scene, function (result) {
+                const output = JSON.stringify(result, null, 2);
+                const blob = new Blob([output], { type: 'application/glb' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'arc_edge.glb';
+                link.click();
+              });
+            }
+
+            // Event listeners for export buttons
+            document.getElementById('exportPNGButton').addEventListener('click', exportToPNG);
+            document.getElementById('exportGLBButton').addEventListener('click', exportToGLB);
+          });
+    </script> 
+  </body> 
+  </html>
